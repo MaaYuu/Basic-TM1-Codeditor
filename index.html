@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Simple jsTree</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <!-- Font Awesome CSS -->
+    <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.3.1/css/all.css'>
+    <link rel='stylesheet' href='index.css'>
+    <script src="treeview.js"></script>
+</head>
+
+<body>
+    
+    <div class="container-fluid">
+        <div class="row">
+            
+            <div class="col-4 border">
+                <input id="search-input" class="search-input" />
+                <div id="SimpleJSTree"></div>
+            </div>
+            <div class="col-8 border">
+                <button type="button" class="btn btn-info" id="save">Save</button>
+                <div class="form-outline">
+                    <textarea class="form-control" rows="60" id="loadOnClick"> 
+                    </textarea>
+                    <!-- <div class="form-control" id="loadOnClick" contenteditable></div> -->
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

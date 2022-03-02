@@ -1,0 +1,13 @@
+.container-fluid .form-control {
+    height: auto;
+  }
+
+div.form-control {
+    white-space: pre-wrap;
+}
+
+textarea {
+    font-family:"Times New Roman", Times, serif;  
+    font-size: 15px; 
+
+}

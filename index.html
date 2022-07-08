@@ -1,36 +1,249 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
 <head>
     <meta charset="utf-8" />
-    <title>Simple jsTree</title>
+    <title>TM1 Process Editor</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <!-- Font Awesome CSS -->
     <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.3.1/css/all.css'>
     <link rel='stylesheet' href='index.css'>
     <script src="treeview.js"></script>
+    <!-- Font Awesome JS -->
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js"
+        integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ"
+        crossorigin="anonymous"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js"
+        integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY"
+        crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.26.1/axios.min.js" integrity="sha512-bPh3uwgU5qEMipS/VOmRqynnMXGGSRv+72H/N260MQeXZIK4PG48401Bsby9Nq5P5fz7hy5UGNmC/W1Z51h2GQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <!--<script src="./packages/jquery-ace/jquery-ace.min.js"></script> -->
+
+    <!--<script src="modal_select.js"></script> -->
 </head>
 
 <body>
-    
-    <div class="container-fluid">
-        <div class="row">
-            
-            <div class="col-4 border">
-                <input id="search-input" class="search-input" />
-                <div id="SimpleJSTree"></div>
-            </div>
-            <div class="col-8 border">
-                <button type="button" class="btn btn-info" id="save">Save</button>
-                <div class="form-outline">
-                    <textarea class="form-control" rows="60" id="loadOnClick"> 
-                    </textarea>
-                    <!-- <div class="form-control" id="loadOnClick" contenteditable></div> -->
+    <div class="wrapper">
+
+        <div class="container-fluid">
+
+            <!--  Toggle Sidebar Button-->
+            <nav class="navbar navbar-expand-lg navbar-light">
+
+
+                <button type="button" id="sidebarCollapse" class="btn btn-secondary">
+                    <i class="fas fa-align-left"></i>
+                    <span></span>
+                </button>
+
+            </nav>
+
+            <div class="row">
+
+
+                <div class="col-4 border" id="sidebar">
+
+                    <!-- Search Input -->
+                    <input id="search-input" class="search-input" />
+                    <!-- Login Button and Pop Up-->
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal"
+                        id="login">Login</button>
+                    <div class="modal" id="myModal">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Login</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form>
+                                        <div class="mb-3">
+                                            <label class="form-label required">TM1 Server</label>
+                                            <select class="form-select" aria-label="Default select example"
+                                                id="servers">
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label required">Username</label>
+                                            <input type="text" class="form-control" id="username" value="admin">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label required">Password</label>
+                                            <input type="password" class="form-control" id="password">
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
+                                        id="loginsubmit">Login</button>
+                                    <button type="submit" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- JsTree for Processes-->
+                    <div id="SimpleJSTree"></div>
+                    <div id="SimpleJSTree2"></div>
+                </div>
+                <div class="col-8 border" id="code-body">
+
+                    <!-- Save Button-->
+                    <button type="button" class="btn btn-info" id="save">
+                        Save
+                    </button>
+
+                    <!-- SaveAs Button and Pop Up-->
+                    <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#myModal3"
+                        id="saveas">Save As</button>
+                    <div class="modal" id="myModal3">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Save as</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form>
+                                        <div class="mb-3" id="saveas_form">
+                                            <label class="form-label required">Name:</label>
+                                            <input type="text" class="form-control" id="saveas_name" value="">
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
+                                        id="executesubmit_saveas">Save As</button>
+                                    <button type="submit" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Delete Button and Pop Up-->
+                    <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#myModal2"
+                        id="execute">Execute</button>
+                    <div class="modal" id="myModal2">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Execute</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form>
+                                        <div class="mb-3" id="parameters">
+                                            <label class="form-label required">Generic</label>
+                                            <input type="text" class="form-control" id="generic" value="admin">
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-warning" data-bs-dismiss="modal"
+                                        id="executesubmit">Execute</button>
+                                    <button type="submit" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Delete Button and Pop Up-->
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#myModal4"
+                        id="delete">Delete</button>
+                    <div class="modal" id="myModal4">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form>
+                                        <div class="mb-3" id="delete_form">
+                                            <label class="form-label required">Are you sure to delete?</label>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal"
+                                        id="deletesubmit">Delete</button>
+                                    <button type="submit" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Tabular Ace Editor 1st-->
+
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <!-- <li class="nav-item" role="presentation">
+                                              <button class="nav-link active" id="DataSource-tab" data-bs-toggle="tab" data-bs-target="#DataSource" type="button" role="tab" aria-controls="DataSource" aria-selected="true">
+                                                Data Source
+                                                </button>
+                                            </li>
+                                            <li class="nav-item" role="presentation">
+                                              <button class="nav-link" id="Variables-tab" data-bs-toggle="tab" data-bs-target="#Variables" type="button" role="tab" aria-controls="Variables" aria-selected="true">
+                                                Variables
+                                                </button>
+                                            </li>
+                                            <li class="nav-item" role="presentation">
+                                              <button class="nav-link" id="Parameters-tab" data-bs-toggle="tab" data-bs-target="#Parameters" type="button" role="tab" aria-controls="Parameters" aria-selected="true">
+                                                Parameters
+                                                </button>
+                                            </li> -->
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="Prolog-tab" data-bs-toggle="tab"
+                                data-bs-target="#Prolog" type="button" role="tab" aria-controls="Prolog"
+                                aria-selected="true">
+                                Prolog
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="MetaData-tab" data-bs-toggle="tab" data-bs-target="#MetaData"
+                                type="button" role="tab" aria-controls="MetaData"
+                                aria-selected="false">MetaData</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="Data-tab" data-bs-toggle="tab" data-bs-target="#Data"
+                                type="button" role="tab" aria-controls="Data" aria-selected="false">Data</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="Epilog-tab" data-bs-toggle="tab" data-bs-target="#Epilog"
+                                type="button" role="tab" aria-controls="Epilog" aria-selected="false">Epilog</button>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane fade show active" id="Prolog" role="tabpanel" aria-labelledby="Prolog-tab">
+                            <div class="code-area" id="editor"></div>
+                        </div>
+                        <div class="tab-pane fade" id="MetaData" role="tabpanel" aria-labelledby="MetaData-tab">
+                            <div class="code-area" id="editor2"></div>
+                        </div>
+                        <div class="tab-pane fade" id="Data" role="tabpanel" aria-labelledby="Data-tab">
+                            <div class="code-area" id="editor3"></div>
+                        </div>
+                        <div class="tab-pane fade" id="Epilog" role="tabpanel" aria-labelledby="Data-tab">
+                            <div class="code-area" id="editor4"></div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
+        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.14/ace.js" integrity="sha512-6ts6Fu561/yzWvD6uwQp3XVYwiWNpWnZ0hdeQrETqtnQiGjTfOS06W76aUDnq51hl1SxXtJaqy7IsZ3oP/uZEg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
+        <script src="./packages/src/ace.js"></script>
+        <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ext-language_tools.js"></script>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
     </div>
 </body>
+
 </html>

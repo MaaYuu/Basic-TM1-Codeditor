@@ -1,9 +1,10 @@
-# Basic-TM1-Codeditor
+#TM1-Codeditor
 
-This is a basic code editor that utilizes from TM1 Rest API.
+This is a code editor that utilizes from TM1 Rest API.
 
 Used libraries:
-* Jquery
+* jQuery 
+* jQuery-Ace
 * Bootstrap
 * Jstree
 
